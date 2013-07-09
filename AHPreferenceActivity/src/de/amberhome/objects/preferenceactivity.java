@@ -17,7 +17,10 @@
 // V1.03
 // - Uploaded to GitHub
 
-package de.amberhome.preferenceactivity;
+// V1.04
+// - AddEditText2() New with some more parameters
+
+package de.amberhome.objects;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -50,7 +53,7 @@ import anywheresoftware.b4a.BA.Version;
 import anywheresoftware.b4a.keywords.Common;
 import anywheresoftware.b4a.objects.collections.List;
 import anywheresoftware.b4a.objects.collections.Map;
-@Version(1.02f)
+@Version(1.04f)
 @Author("Erel Uziel / Markus Stipp")
 
 public class preferenceactivity extends PreferenceActivity{
@@ -355,6 +358,36 @@ public class preferenceactivity extends PreferenceActivity{
 				}
 			});
 		}
+		
+		/**
+		 * Adds a preference entry which allows the user to enter free text.
+		 *Key - The preference key associated with the value.
+		 *Title - Entry title.
+		 *Summary - Entry summary (second row).
+		 *DefaultValue - The default value of this preference entry if the key does not already exist.
+		 *InputType - InputType for the EditText view. For valid values see <link>InputType|http://developer.android.com/reference/android/text/InputType.html</link>
+		 *Password - Hidden input when true.
+		 *SelectAllOnFocus - Select complete text on focus.
+		 *Dependency - A key of a preference this preference entry depends on.
+		 */
+	    public void AddEditText2(String Key, String Title, String Summary, String DefaultValue, final int InputType, final boolean Password, final boolean SelectAllOnFocus, String Dependency)
+	    {
+	      this.childs.add(new B4APreference(Key, Title, Summary, DefaultValue, Dependency)
+	      {
+	        Preference createPreference(PreferenceActivity c) {
+	          EditTextPreference e = new EditTextPreference(c);
+	          e.setDialogTitle(this.title);
+	          EditText et = e.getEditText();
+	          et.setInputType(InputType);
+	          et.setSelectAllOnFocus(SelectAllOnFocus);
+	          if (Password) et.setTransformationMethod(new PasswordTransformationMethod());
+	          handleDefaults(e);
+	          return e;
+	        }
+	      });
+	    }
+
+		
 		/**
 		 * Adds a preference entry which allows the user to enter a password. Be aware that the password is saved uncrypted in the preferences file!
 		 *Key - The preference key associated with the value.
